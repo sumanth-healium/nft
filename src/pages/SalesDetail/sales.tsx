@@ -15,13 +15,13 @@ import { HiOutlineArrowsUpDown } from "react-icons/hi2";
 function SalesDetails() {
   const { location, setLocation } = useContext(DataContext);
   const locations = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [moreData, setMoreData] = useState<any>([]);
 
   useEffect(() => {
     setLocation(locations.pathname);
   }, []);
-  
+
   // return <Details></Details>
   const { makeRequests } = useHelper();
   const params = useParams();
@@ -34,12 +34,12 @@ function SalesDetails() {
   const getDetails = async () => {
     const data = await makeRequests(AUCTION_DETAILS(params.id));
     setData(data.data);
-    console.log("🚩 ~ file: sales.tsx ~ line 28 ~ getDetails ~ data.data", data.data)
 
     COLLECTION_PARAMS.limit = 4;
     COLLECTION_PARAMS.startFrom = 0;
-    const response = await makeRequests(COLLECTION(COLLECTION_PARAMS,data.data?.collection?.id));
-    console.log("🚩 ~ file: sales.tsx ~ line 42 ~ getDetails ~ response", response)
+    const response = await makeRequests(
+      COLLECTION(COLLECTION_PARAMS, data.data?.collection?.id)
+    );
     setMoreData(response.data.items);
   };
   useEffect(() => {
@@ -107,30 +107,37 @@ function SalesDetails() {
   ];
 
   const gotoRoute = () => {
-    navigate(`/collection/${data?.collection?.id}`)
-  }
-
-  const getMorefromCollections = async () => {
-    
+    navigate(`/collection/${data?.collection?.id}`);
   };
+
+  const getMorefromCollections = async () => {};
 
   return (
     <>
       <section className="text-white body-font overflow-hidden">
         <div className="container px-5 mx-auto">
-          <div className="flex flex-wrap mx-5">
-            <div className="p-12 md:w-1/2 flex flex-col items-start">
+          <div className="flex">
+            <div className="ml-20 md:w-[40%] flex flex-col items-start">
               {Object.values(data).length != 0 && (
-                <img
-                  alt="ecommerce"
-                  className="w-full sm:h-auto md:h-[25rem] object-center  rounded"
-                  src={getInfuraURL(data?.meta?.thumbnail)}
-                />
+                // <img
+                //   alt="ecommerce"
+                //   // className="w-full sm:h-auto md:h-[25rem] object-center  rounded"
+                //   // className="object-center h-48 w-96 rounded" max-h-[30rem] max-w-[30rem]
+                //   className="object-center h-48 w-96 rounded"
+                //   src={getInfuraURL(data?.meta?.image)}
+                // />
+                <div className="aspect-w-1 aspect-h-1 w-[100%] z-[-1]">
+                  <img
+                    alt="ecommerce"
+                    // className="w-full sm:h-auto md:h-[25rem] object-center  rounded"
+                    // className="object-center h-48 w-96 rounded" max-h-[30rem] max-w-[30rem]
+                    className="object-center rounded"
+                    src={getInfuraURL(data?.meta?.image)}
+                  />
+                </div>
               )}
 
-              <div
-                className={`w-[100%] mt-5 overflow-hidden`}
-              >
+              <div className={`w-[100%] mt-5 overflow-hidden`}>
                 <div
                   className={`overflow-hidden border shadow sm:rounded-lg sm:w-auto`}
                 >
@@ -240,7 +247,7 @@ function SalesDetails() {
               </div>
             </div>
 
-            <div className="p-12 md:w-1/2 flex flex-col items-start">
+            <div className="p-5 md:w-[60%] flex flex-col items-start">
               <h2 className="font-Montserrat text-[24px] font-extrabold">
                 {data?.meta?.name}
               </h2>
@@ -258,7 +265,10 @@ function SalesDetails() {
                           <p className="text-center text-xl">Collection</p>
                         </div>
                       </dt>
-                      <dt onClick={() => gotoRoute()} className="text-base hover:cursor-pointer font-normal whitespace-nowrap text-gray-400">
+                      <dt
+                        onClick={() => gotoRoute()}
+                        className="text-blue-500 text-base hover:cursor-pointer font-normal whitespace-nowrap"
+                      >
                         {data?.collection?.name}
                       </dt>
                     </div>
@@ -295,7 +305,7 @@ function SalesDetails() {
           </div>
           <div className="flex flex-wrap">
             <div
-              className={`mt-5 overflow-hidden border mx-16 shadow sm:rounded-lg sm:w-[100%]`}
+              className={`mt-5 overflow-hidden border ml-20 mr-4 shadow sm:rounded-lg sm:w-[100%]`}
             >
               <div className="px-4 py-5 sm:px-6 border-b">
                 <h3 className="text-lg font-medium leading-6 ">Details</h3>
@@ -375,7 +385,7 @@ function SalesDetails() {
 
           <div className="flex flex-wrap mb-5">
             <div
-              className={`mt-5 overflow-hidden border mx-16 shadow sm:rounded-lg sm:w-[100%]`}
+              className={`mt-5 overflow-hidden border ml-20 mr-4  shadow sm:rounded-lg sm:w-[100%]`}
             >
               <div className={`overflow-hidden`}>
                 <div className="px-4 py-5 sm:px-6 border-b">
@@ -388,79 +398,87 @@ function SalesDetails() {
                   <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="lg:px-16 py-4">
                       <div className="overflow-hidden">
+                        <div className="flex mx-5">
+                          <div className="mt-8 grid md:grid-flow-col md:grid-rows-1 sm:grid-rows-2 gap-4 z-[-1]">
+                            {" "}
+                            {moreData?.map((item: any, index: any) => (
+                              <div key={index}>
+                                <div className="relative border rounded-lg cursor-pointer">
+                                  <div className="relative aspect-w-1 aspect-h-1 w-60 rounded-lg overflow-hidden">
+                                    {/* <div className="relative aspect-w-1 aspect-h-1 w-full h-72 rounded-lg overflow-hidden"> */}
+                                    <img
+                                      src={getInfuraURL(
+                                        item.meta.thumbnail || item.meta.media
+                                      )}
+                                      alt="img."
+                                      // className="w-[20rem] h-full object-scale-down"
+                                    />
+                                  </div>
+                                  <div className="mx-2 py-2">
+                                    <p className="mt-1 text-sm text-white">
+                                      {item.meta.name}
+                                    </p>
+                                    <div className="flex justify-between border-b py-1">
+                                      <p className="mt-1 text-sm text-gray-500">
+                                        Price
+                                      </p>
+                                      <p className="mt-1 text-sm text-white">
+                                        {item.marketFee}
+                                      </p>
+                                    </div>
+                                    <div className="flex justify-between py-1">
+                                      <p className="mt-1 text-sm text-gray-500">
+                                        Author
+                                      </p>
+                                      <p className="mt-1 text-sm text-white">
+                                        {item.creator.name}
+                                      </p>
+                                    </div>
 
-                      <div className="flex mx-10">
-              <div className="mt-8 grid md:grid-flow-col md:grid-rows-1 sm:grid-rows-2 gap-4 z-[-1]">
-                {" "}
-                {moreData?.map((item: any, index: any) => (
-                  <div key={index}>
-                    <div className="relative border rounded-lg cursor-pointer">
-                      <div className="relative w-full h-72  rounded-lg overflow-hidden">
-                        <img
-                          src={getInfuraURL(
-                            item.meta.thumbnail || item.meta.media
-                          )}
-                          alt="img."
-                          className="w-[20rem] h-full object-center object-cover"
-                        />
-                      </div>
-                      <div className="mx-2 py-2">
-                        <p className="mt-1 text-sm text-white">
-                          {item.meta.name}
-                        </p>
-                        <div className="flex justify-between border-b py-1">
-                          <p className="mt-1 text-sm text-gray-500">Price</p>
-                          <p className="mt-1 text-sm text-white">
-                            {item.marketFee}
-                          </p>
-                        </div>
-                        <div className="flex justify-between py-1">
-                          <p className="mt-1 text-sm text-gray-500">Author</p>
-                          <p className="mt-1 text-sm text-white">{item.creator.name}</p>
-                        </div>
-
-                        <div className="py-1">
-                          <h4 className="border-blue-600 border bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-2 py-1 rounded-lg text-center text-white">
-                            Place Bid
-                          </h4>
-                          <h4 className="border-blue-600 border text-blue-600 px-2 mt-2 py-1 rounded-lg text-center whitespace-nowrap">
-                            Buy NFT 2.03 ETH
-                          </h4>
-                        </div>
-                      </div>
-                      <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
-                        {/* <div
+                                    <div className="py-1">
+                                      <h4 className="border-blue-600 border bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-2 py-1 rounded-lg text-center text-white">
+                                        Place Bid
+                                      </h4>
+                                      <h4 className="border-blue-600 border text-blue-600 px-2 mt-2 py-1 rounded-lg text-center whitespace-nowrap">
+                                        Buy NFT 2.03 ETH
+                                      </h4>
+                                    </div>
+                                  </div>
+                                  <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
+                                    {/* <div
                           aria-hidden="true"
                           className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
                         /> */}
-                        <div className="absolute left-0 top-3 w-full">
-                          <div className="flex justify-between">
-                            <button className="flex items-center justify-between py-2 px-4 rounded-full bg-white text-gray-500 text-sm hover:bg-gray-300">
-                              <span>
-                                <BsClock />
-                              </span>
-                              <span className="ml-2">02:48:03</span>
-                            </button>
-                            <button className="flex items-center justify-between py-2 px-4 rounded-full bg-white text-gray-500 text-sm hover:bg-gray-300">
-                              <span>
-                                <BsHeart />
-                              </span>
-                              <span className="ml-2">116</span>
-                            </button>
+                                    <div className="absolute left-0 top-3 w-full">
+                                      <div className="flex justify-between">
+                                        <button className="flex items-center justify-between py-2 px-4 rounded-full bg-white text-gray-500 text-sm hover:bg-gray-300">
+                                          <span>
+                                            <BsClock />
+                                          </span>
+                                          <span className="ml-2">02:48:03</span>
+                                        </button>
+                                        <button className="flex items-center justify-between py-2 px-4 rounded-full bg-white text-gray-500 text-sm hover:bg-gray-300">
+                                          <span>
+                                            <BsHeart />
+                                          </span>
+                                          <span className="ml-2">116</span>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-             
-            </div>
-            <div className="flex justify-center mx-auto py-5">
-                  <h4 onClick={() => gotoRoute()} className="border-blue-600 border cursor-pointer bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-2 py-1 rounded-lg font-normal text-center text-white">
-                  View Collection
-                  </h4>
-               </div>
+                        <div className="flex justify-center mx-auto py-5">
+                          <h4
+                            onClick={() => gotoRoute()}
+                            className="border-blue-600 border cursor-pointer bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-2 py-1 rounded-lg font-normal text-center text-white"
+                          >
+                            View Collection
+                          </h4>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -751,7 +769,7 @@ function SalesDetails() {
         </>
       )} */}
     </>
-  ); 
+  );
 }
 
 export default SalesDetails;

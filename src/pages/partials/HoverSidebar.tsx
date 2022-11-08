@@ -28,8 +28,8 @@ const HoverSidebar = () => {
             <div
               onMouseEnter={() => { setIsShown(true); }}
               onMouseLeave={() => { setIsShown(false); }}
-              className={`bg-[#0e0e0e] min-h-screen w-16 hover:w-48 
-        duration-500 text-gray-100 px-4 z-20`}
+              className={`bg-[#0e0e0e] min-h-screen w-16 hover:w-48 border-gray-400
+        duration-500 text-gray-100 px-4 z-20 border-r-[0.5px]`}
             >
               <div
                 className="mt-10 flex flex-col gap-6 relative">
